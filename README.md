@@ -46,7 +46,7 @@ Link directly from [unpkg](https://unpkg.com/)
 ## Call the plugin
 
 ```javascript
-$('.my-cond-form').conditionize({
+$('.my-form').conditionize({
     selector: '[data-cond]'
 });
 ```
