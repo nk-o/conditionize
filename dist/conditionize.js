@@ -1,6 +1,6 @@
 /*!
  * Name    : Conditionize - jQuery conditions for forms
- * Version : 1.0.0
+ * Version : 1.0.1
  * Author  : nK <https://nkdev.info>
  * GitHub  : https://github.com/nk-o/conditionize
  */
@@ -121,6 +121,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+var $ = _global.window.jQuery;
 var instanceID = 0;
 
 // https://gist.github.com/aaditmshah/6683499
@@ -499,23 +500,21 @@ plugin.constructor = Conditionize;
 
 _global.window.Conditionize = Conditionize;
 
-if (typeof jQuery !== 'undefined') {
-    var jQueryPlugin = function jQueryPlugin() {
-        var args = arguments || [];
-        Array.prototype.unshift.call(args, this);
-        var res = plugin.apply(_global.window, args);
-        return (typeof res === 'undefined' ? 'undefined' : _typeof(res)) !== 'object' ? res : this;
-    };
-    jQueryPlugin.constructor = plugin.constructor;
+var jQueryPlugin = function jQueryPlugin() {
+    var args = arguments || [];
+    Array.prototype.unshift.call(args, this);
+    var res = plugin.apply(_global.window, args);
+    return (typeof res === 'undefined' ? 'undefined' : _typeof(res)) !== 'object' ? res : this;
+};
+jQueryPlugin.constructor = plugin.constructor;
 
-    // no conflict
-    var oldJqPlugin = jQuery.fn.conditionize;
-    jQuery.fn.conditionize = jQueryPlugin;
-    jQuery.fn.conditionize.noConflict = function () {
-        jQuery.fn.conditionize = oldJqPlugin;
-        return this;
-    };
-}
+// no conflict
+var oldJqPlugin = $.fn.conditionize;
+$.fn.conditionize = jQueryPlugin;
+$.fn.conditionize.noConflict = function () {
+    $.fn.conditionize = oldJqPlugin;
+    return this;
+};
 
 /***/ }),
 /* 3 */
