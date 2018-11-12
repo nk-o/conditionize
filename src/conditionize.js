@@ -2,6 +2,7 @@ import { debounce } from 'throttle-debounce';
 import raf from 'rafl';
 import { window } from 'global';
 
+const $ = window.jQuery;
 let instanceID = 0;
 
 // https://gist.github.com/aaditmshah/6683499
@@ -331,20 +332,18 @@ plugin.constructor = Conditionize;
 
 window.Conditionize = Conditionize;
 
-if (typeof jQuery !== 'undefined') {
-    const jQueryPlugin = function () {
-        const args = arguments || [];
-        Array.prototype.unshift.call(args, this);
-        const res = plugin.apply(window, args);
-        return typeof res !== 'object' ? res : this;
-    };
-    jQueryPlugin.constructor = plugin.constructor;
+const jQueryPlugin = function () {
+    const args = arguments || [];
+    Array.prototype.unshift.call(args, this);
+    const res = plugin.apply(window, args);
+    return typeof res !== 'object' ? res : this;
+};
+jQueryPlugin.constructor = plugin.constructor;
 
-    // no conflict
-    const oldJqPlugin = jQuery.fn.conditionize;
-    jQuery.fn.conditionize = jQueryPlugin;
-    jQuery.fn.conditionize.noConflict = function () {
-        jQuery.fn.conditionize = oldJqPlugin;
-        return this;
-    };
-}
+// no conflict
+const oldJqPlugin = $.fn.conditionize;
+$.fn.conditionize = jQueryPlugin;
+$.fn.conditionize.noConflict = function () {
+    $.fn.conditionize = oldJqPlugin;
+    return this;
+};
