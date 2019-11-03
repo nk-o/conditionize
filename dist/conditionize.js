@@ -1,6 +1,6 @@
 /*!
  * Name    : Conditionize - jQuery conditions for forms
- * Version : 1.0.1
+ * Version : 1.0.2
  * Author  : nK <https://nkdev.info>
  * GitHub  : https://github.com/nk-o/conditionize
  */
@@ -66,40 +66,18 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1);
+/******/ 	return __webpack_require__(__webpack_require__.s = 0);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-/* WEBPACK VAR INJECTION */(function(global) {
+module.exports = __webpack_require__(1);
 
-var win;
-
-if (typeof window !== "undefined") {
-    win = window;
-} else if (typeof global !== "undefined") {
-    win = global;
-} else if (typeof self !== "undefined") {
-    win = self;
-} else {
-    win = {};
-}
-
-module.exports = win;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ }),
 /* 1 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__(2);
-
-
-/***/ }),
-/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -109,15 +87,9 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _throttleDebounce = __webpack_require__(3);
+var _throttleDebounce = __webpack_require__(2);
 
-var _rafl = __webpack_require__(4);
-
-var _rafl2 = _interopRequireDefault(_rafl);
-
-var _global = __webpack_require__(0);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _global = __webpack_require__(3);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -306,22 +278,20 @@ var Conditionize = function () {
         value: function runCheck($items) {
             var self = this;
 
-            (0, _rafl2.default)(function () {
-                $items.each(function () {
-                    var $this = $(this);
-                    var conditionString = $this.attr(self.options.conditionAttr).toString();
-                    var conditionResult = self.checkCondition(conditionString);
+            $items.each(function () {
+                var $this = $(this);
+                var conditionString = $this.attr(self.options.conditionAttr).toString();
+                var conditionResult = self.checkCondition(conditionString);
 
-                    if (self.options.customToggle) {
-                        self.options.customToggle.call(self, $this, conditionResult);
-                    } else {
-                        $this[conditionResult ? 'show' : 'hide']();
-                    }
+                if (self.options.customToggle) {
+                    self.options.customToggle.call(self, $this, conditionResult);
+                } else {
+                    $this[conditionResult ? 'show' : 'hide']();
+                }
 
-                    if (self.options.onCheck) {
-                        self.options.onCheck($this, conditionResult);
-                    }
-                });
+                if (self.options.onCheck) {
+                    self.options.onCheck($this, conditionResult);
+                }
             });
         }
 
@@ -517,14 +487,14 @@ $.fn.conditionize.noConflict = function () {
 };
 
 /***/ }),
-/* 3 */
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 Object.defineProperty(exports, "__esModule", {
-	value: true
+  value: true
 });
 /* eslint-disable no-undefined,no-param-reassign,no-shadow */
 
@@ -545,90 +515,101 @@ Object.defineProperty(exports, "__esModule", {
  * @return {Function}  A new, throttled, function.
  */
 function throttle(delay, noTrailing, callback, debounceMode) {
-
-	/*
-  * After wrapper has stopped being called, this timeout ensures that
-  * `callback` is executed at the proper times in `throttle` and `end`
-  * debounce modes.
-  */
-	var timeoutID;
-
-	// Keep track of the last time `callback` was executed.
-	var lastExec = 0;
-
-	// `noTrailing` defaults to falsy.
-	if (typeof noTrailing !== 'boolean') {
-		debounceMode = callback;
-		callback = noTrailing;
-		noTrailing = undefined;
-	}
-
-	/*
-  * The `wrapper` function encapsulates all of the throttling / debouncing
-  * functionality and when executed will limit the rate at which `callback`
-  * is executed.
-  */
-	function wrapper() {
-
-		var self = this;
-		var elapsed = Number(new Date()) - lastExec;
-		var args = arguments;
-
-		// Execute `callback` and update the `lastExec` timestamp.
-		function exec() {
-			lastExec = Number(new Date());
-			callback.apply(self, args);
-		}
-
-		/*
-   * If `debounceMode` is true (at begin) this is used to clear the flag
-   * to allow future `callback` executions.
+  /*
+   * After wrapper has stopped being called, this timeout ensures that
+   * `callback` is executed at the proper times in `throttle` and `end`
+   * debounce modes.
    */
-		function clear() {
-			timeoutID = undefined;
-		}
+  var timeoutID;
+  var cancelled = false; // Keep track of the last time `callback` was executed.
 
-		if (debounceMode && !timeoutID) {
-			/*
-    * Since `wrapper` is being called for the first time and
-    * `debounceMode` is true (at begin), execute `callback`.
-    */
-			exec();
-		}
+  var lastExec = 0; // Function to clear existing timeout
 
-		// Clear any existing timeout.
-		if (timeoutID) {
-			clearTimeout(timeoutID);
-		}
+  function clearExistingTimeout() {
+    if (timeoutID) {
+      clearTimeout(timeoutID);
+    }
+  } // Function to cancel next exec
 
-		if (debounceMode === undefined && elapsed > delay) {
-			/*
-    * In throttle mode, if `delay` time has been exceeded, execute
-    * `callback`.
-    */
-			exec();
-		} else if (noTrailing !== true) {
-			/*
-    * In trailing throttle mode, since `delay` time has not been
-    * exceeded, schedule `callback` to execute `delay` ms after most
-    * recent execution.
-    *
-    * If `debounceMode` is true (at begin), schedule `clear` to execute
-    * after `delay` ms.
-    *
-    * If `debounceMode` is false (at end), schedule `callback` to
-    * execute after `delay` ms.
-    */
-			timeoutID = setTimeout(debounceMode ? clear : exec, debounceMode === undefined ? delay - elapsed : delay);
-		}
-	}
 
-	// Return the wrapper function.
-	return wrapper;
+  function cancel() {
+    clearExistingTimeout();
+    cancelled = true;
+  } // `noTrailing` defaults to falsy.
+
+
+  if (typeof noTrailing !== 'boolean') {
+    debounceMode = callback;
+    callback = noTrailing;
+    noTrailing = undefined;
+  }
+  /*
+   * The `wrapper` function encapsulates all of the throttling / debouncing
+   * functionality and when executed will limit the rate at which `callback`
+   * is executed.
+   */
+
+  function wrapper() {
+    var self = this;
+    var elapsed = Date.now() - lastExec;
+    var args = arguments;
+
+    if (cancelled) {
+      return;
+    } // Execute `callback` and update the `lastExec` timestamp.
+
+
+    function exec() {
+      lastExec = Date.now();
+      callback.apply(self, args);
+    }
+    /*
+     * If `debounceMode` is true (at begin) this is used to clear the flag
+     * to allow future `callback` executions.
+     */
+
+    function clear() {
+      timeoutID = undefined;
+    }
+
+    if (debounceMode && !timeoutID) {
+      /*
+       * Since `wrapper` is being called for the first time and
+       * `debounceMode` is true (at begin), execute `callback`.
+       */
+      exec();
+    }
+
+    clearExistingTimeout();
+
+    if (debounceMode === undefined && elapsed > delay) {
+      /*
+       * In throttle mode, if `delay` time has been exceeded, execute
+       * `callback`.
+       */
+      exec();
+    } else if (noTrailing !== true) {
+      /*
+       * In trailing throttle mode, since `delay` time has not been
+       * exceeded, schedule `callback` to execute `delay` ms after most
+       * recent execution.
+       *
+       * If `debounceMode` is true (at begin), schedule `clear` to execute
+       * after `delay` ms.
+       *
+       * If `debounceMode` is false (at end), schedule `callback` to
+       * execute after `delay` ms.
+       */
+      timeoutID = setTimeout(debounceMode ? clear : exec, debounceMode === undefined ? delay - elapsed : delay);
+    }
+  }
+
+  wrapper.cancel = cancel; // Return the wrapper function.
+
+  return wrapper;
 }
 
 /* eslint-disable no-undefined */
-
 /**
  * Debounce execution of a function. Debouncing, unlike throttling,
  * guarantees that a function is only executed a single time, either at the
@@ -643,52 +624,38 @@ function throttle(delay, noTrailing, callback, debounceMode) {
  *
  * @return {Function} A new, debounced function.
  */
+
 function debounce(delay, atBegin, callback) {
-	return callback === undefined ? throttle(delay, atBegin, false) : throttle(delay, callback, atBegin !== false);
+  return callback === undefined ? throttle(delay, atBegin, false) : throttle(delay, callback, atBegin !== false);
 }
 
 exports.throttle = throttle;
 exports.debounce = debounce;
 
 /***/ }),
-/* 4 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
+/* WEBPACK VAR INJECTION */(function(global) {
 
+var win;
 
-var global = __webpack_require__(0);
-
-/**
- * `requestAnimationFrame()`
- */
-
-var request = global.requestAnimationFrame || global.webkitRequestAnimationFrame || global.mozRequestAnimationFrame || fallback;
-
-var prev = +new Date();
-function fallback(fn) {
-  var curr = +new Date();
-  var ms = Math.max(0, 16 - (curr - prev));
-  var req = setTimeout(fn, ms);
-  return prev = curr, req;
+if (typeof window !== "undefined") {
+    win = window;
+} else if (typeof global !== "undefined") {
+    win = global;
+} else if (typeof self !== "undefined") {
+    win = self;
+} else {
+    win = {};
 }
 
-/**
- * `cancelAnimationFrame()`
- */
-
-var cancel = global.cancelAnimationFrame || global.webkitCancelAnimationFrame || global.mozCancelAnimationFrame || clearTimeout;
-
-if (Function.prototype.bind) {
-  request = request.bind(global);
-  cancel = cancel.bind(global);
-}
-
-exports = module.exports = request;
-exports.cancel = cancel;
+module.exports = win;
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ }),
-/* 5 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
