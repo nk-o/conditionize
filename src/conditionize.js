@@ -1,5 +1,4 @@
 import { debounce } from 'throttle-debounce';
-import raf from 'rafl';
 import { window } from 'global';
 
 const $ = window.jQuery;
@@ -151,22 +150,20 @@ class Conditionize {
     runCheck($items) {
         const self = this;
 
-        raf(() => {
-            $items.each(function () {
-                const $this = $(this);
-                const conditionString = $this.attr(self.options.conditionAttr).toString();
-                const conditionResult = self.checkCondition(conditionString);
+        $items.each(function () {
+            const $this = $(this);
+            const conditionString = $this.attr(self.options.conditionAttr).toString();
+            const conditionResult = self.checkCondition(conditionString);
 
-                if (self.options.customToggle) {
-                    self.options.customToggle.call(self, $this, conditionResult);
-                } else {
-                    $this[conditionResult ? 'show' : 'hide']();
-                }
+            if (self.options.customToggle) {
+                self.options.customToggle.call(self, $this, conditionResult);
+            } else {
+                $this[conditionResult ? 'show' : 'hide']();
+            }
 
-                if (self.options.onCheck) {
-                    self.options.onCheck($this, conditionResult);
-                }
-            });
+            if (self.options.onCheck) {
+                self.options.onCheck($this, conditionResult);
+            }
         });
     }
 

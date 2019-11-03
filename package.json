@@ -60,7 +60,6 @@
     },
     "dependencies": {
         "global": "^4.3.2",
-        "rafl": "^1.2.2",
         "throttle-debounce": "^2.0.0"
     }
 }
