@@ -15,13 +15,19 @@ Link directly from [unpkg](https://unpkg.com/)
 <script src="https://unpkg.com/conditionize@1/dist/conditionize.min.js"></script>
 ```
 
+#### ES6 import
+To use with a bundler like browserify or webpack
+```javascript
+import 'conditionize';
+```
+
 ## Set up your HTML
 ```html
 <form class="my-form" action="#">
   <h1>Conditionize</h1>
-  
+
   <input type="text" name="text-control" placeholder="Type 'magic'">
-  
+
   <div data-cond="[name=text-control] == magic">Magically show when text control contains 'magic' word.</div>
 
   <select name="select-control">
@@ -36,7 +42,7 @@ Link directly from [unpkg](https://unpkg.com/)
     <span data-cond="[name=checkbox-control] != true">Nope</span>
     <span data-cond="[name=checkbox-control]">Yep</span>
   </label>
-  
+
   <div>
     <a href="https://github.com/nk-o/conditionize" data-cond="[name=select-control] == 3 && [name=checkbox-control] == true">GitHub</a>
   </div>
