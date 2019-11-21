@@ -1,6 +1,6 @@
 /*!
  * Name    : Conditionize - jQuery conditions for forms
- * Version : 1.0.2
+ * Version : 1.0.3
  * Author  : nK <https://nkdev.info>
  * GitHub  : https://github.com/nk-o/conditionize
  */
