@@ -117,7 +117,10 @@ class Conditionize {
             onCheck: null, // function( $item, show ) {}
         };
 
-        self.options = Object.assign({}, self.defaults, userOptions);
+        self.options = {
+            ...self.defaults,
+            ...userOptions,
+        };
 
         self.runCheck = debounce(self.options.checkDebounce, self.runCheck);
 
@@ -252,11 +255,12 @@ class Conditionize {
                 }
 
                 return self.condition(arr[0], arr[1], arr[2]);
-            } else if (arr.length === 1) {
-                return self.compare(arr[0]);
             }
-            return false;
-        } else if (self.isValidSelector(arr)) {
+
+            return arr.length === 1 ? self.compare(arr[0]) : false;
+        }
+
+        if (self.isValidSelector(arr)) {
             const $listenTo = $(arr);
             let result = false;
 
@@ -268,6 +272,7 @@ class Conditionize {
 
             return result;
         }
+
         return arr;
     }
 
