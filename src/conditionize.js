@@ -264,8 +264,10 @@ class Conditionize {
             const $listenTo = $(arr);
             let result = false;
 
-            if ($listenTo.is('[type=radio], [type=checkbox]')) {
+            if ($listenTo.is('[type=checkbox]')) {
                 result = $listenTo.is(':checked');
+            } else if ($listenTo.is('[type=radio]')) {
+                result = $listenTo.filter(':checked').val();
             } else if ($listenTo.is('textarea, select, input')) {
                 result = $listenTo.val();
             }
