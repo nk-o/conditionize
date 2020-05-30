@@ -1,6 +1,6 @@
 /*!
  * Name    : Conditionize - jQuery conditions for forms
- * Version : 1.0.4
+ * Version : 1.0.5
  * Author  : nK <https://nkdev.info>
  * GitHub  : https://github.com/nk-o/conditionize
  */
@@ -106,7 +106,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var throttle_debounce__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
 /* harmony import */ var global__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3);
 /* harmony import */ var global__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(global__WEBPACK_IMPORTED_MODULE_1__);
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
@@ -263,9 +263,7 @@ var relations = {
   }
 }; // Conditionize class
 
-var Conditionize =
-/*#__PURE__*/
-function () {
+var Conditionize = /*#__PURE__*/function () {
   function Conditionize(container, userOptions) {
     _classCallCheck(this, Conditionize);
 
@@ -287,7 +285,7 @@ function () {
       onCheck: null // function( $item, show ) {}
 
     };
-    self.options = _objectSpread({}, self.defaults, {}, userOptions);
+    self.options = _objectSpread(_objectSpread({}, self.defaults), userOptions);
     self.runCheck = Object(throttle_debounce__WEBPACK_IMPORTED_MODULE_0__["debounce"])(self.options.checkDebounce, self.runCheck);
     self.init();
   }
@@ -427,8 +425,10 @@ function () {
         var $listenTo = $(arr);
         var result = false;
 
-        if ($listenTo.is('[type=radio], [type=checkbox]')) {
+        if ($listenTo.is('[type=checkbox]')) {
           result = $listenTo.is(':checked');
+        } else if ($listenTo.is('[type=radio]')) {
+          result = $listenTo.filter(':checked').val();
         } else if ($listenTo.is('textarea, select, input')) {
           result = $listenTo.val();
         }
@@ -686,7 +686,7 @@ module.exports = win;
 /* 4 */
 /***/ (function(module, exports) {
 
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 var g; // This works in non-strict mode
 
