@@ -207,7 +207,7 @@ class Conditionize {
     isValidSelector(selector) {
         if (
             typeof selector !== 'string'
-            || $.isNumeric(selector)
+            || !Number.isNaN(selector - parseFloat(selector))
             || selector === 'false'
             || selector === 'true'
             || selector == false // eslint-disable-line

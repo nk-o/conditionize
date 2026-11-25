@@ -365,7 +365,7 @@ var Conditionize = /*#__PURE__*/function () {
   }, {
     key: "isValidSelector",
     value: function isValidSelector(selector) {
-      if (typeof selector !== 'string' || $.isNumeric(selector) || selector === 'false' || selector === 'true' || selector == false // eslint-disable-line
+      if (typeof selector !== 'string' || !Number.isNaN(selector - parseFloat(selector)) || selector === 'false' || selector === 'true' || selector == false // eslint-disable-line
       || selector == true // eslint-disable-line
       ) {
           return false;
